@@ -40,6 +40,28 @@ class Model {
       new Obstacle(this.app, 1.2, 0.175, 0.3, 0.35, true),
     ];
   }
+  // performCollision() {
+  //   for (let i = 0; i < this.obstacles.length; i++) {
+  //     let obstacle = this.obstacles[i];
+  //     if (
+  //       CONFIG.player.posX + CONFIG.player.dimX * 0.5 >
+  //         obstacle.posX - obstacle.dimX * 0.5 &&
+  //       CONFIG.player.posX - CONFIG.player.dimX * 0.5 <
+  //         obstacle.posX + obstacle.dimX * 0.5 &&
+  //       CONFIG.player.posY - CONFIG.player.dimY * 0.5 <
+  //         obstacle.posY + obstacle.dimY * 0.5 &&
+  //       CONFIG.player.posY + CONFIG.player.dimY * 0.5 >
+  //         obstacle.posY - obstacle.dimY * 0.5 &&
+  //       CONFIG.player.posY + CONFIG.player.dimY * 0.5 >
+  //         obstacle.posY - obstacle.dimY * 0.5 &&
+  //       CONFIG.player.posY - CONFIG.player.dimY * 0.5 <
+  //         obstacle.posY + obstacle.dimY * 0.5
+  //     ) {
+  //       this.app.isRunning = false;
+  //       this.bonk.play();
+  //     }
+  //   }
+  // }
   resize() {
     console.log("resizing model");
     //nothing to do because of the coordinate system we've chosen
@@ -51,6 +73,12 @@ class Model {
       let obstacle = this.obstacles[i];
       obstacle.update(obstacle.posX - this.player.posX + this.player.fixedPosX);
     }
-    // detect collision here
+    // for (let i = 0; i < this.obstacles.length; i++) {
+    //   let obstacle = this.obstacles[i];
+    //   this.performCollision(
+    //     obstacle.posX - this.player.posX + this.player.fixedPosX
+    //   );
+    // }
+    // detect collision here - right edge of one has to be past left edge of another, and top of one has to be past another
   }
 }
