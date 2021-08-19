@@ -20,3 +20,25 @@ img {
   width: 20%;
   height: 20%;
 }
+#tryAgainButton {
+  position: absolute;
+  left: 40%;
+  top: 40%;
+  width: 20%;
+  height: 20%;
+  display: none;
+}
+#score {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: yellow;
+  font-size: 4em;
+}
+#highScore {
+  position: absolute;
+  right: 0;
+  top: 2em;
+  color: yellow;
+  font-size: 2em;
+}

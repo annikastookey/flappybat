@@ -4,6 +4,7 @@ const CONFIG = {
     quitKey : "escape",
     startButton: "startButton",
     startDelay : 1500,
+    tryAgainButton: "tryAgainButton"
   },
   obstacle : {
     bigCountMax : 4,

@@ -41,6 +41,15 @@ class Controller {
         }, CONFIG.controller.startDelay);
         this.style.display = "none";
       });
+    // document
+    //   .getElementById(CONFIG.controller.tryAgainButton)
+    //   .addEventListener("click", function () {
+    //     setTimeout(Function () {}
+    //       app = new App;
+    //       that.app.start();
+    //     }, CONFIG.controller.startDelay);
+    //     this.style.display = "none;"
+    //   });
   }
   resize() {
     console.log("resizing controller");

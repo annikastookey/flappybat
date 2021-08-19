@@ -1,14 +1,17 @@
 const VEL_Y_MIN = CONFIG.player.velYMin;
 
+let wingflap = undefined;
+let bonk = undefined;
+
 class Player {
   constructor(app) {
     let p = CONFIG.player;
     this.posX = p.posX;
     this.fixedPosX = p.posX;
-    this.posY = p.posY
+    this.posY = p.posY;
     this.dimX = p.dimX;
     this.dimY = p.dimY;
-    this.img = document.getElementById(p.bat);
+    this.img = document.getElementById(p.img);
     this.velX = p.velX;
     this.velY = p.velY;
     this.gravity = CONFIG.world.gravity;
@@ -36,6 +39,20 @@ class Player {
   }
   handleFlap() {
     this.isFlapping = true;
+    wingflap.currentTime = 0;
+    wingflap.play();
+  }
+  static initialize() {
+    wingflap = document.getElementById("wingflap");
+    bonk = document.getElementById("bonk");
+  }
+  restart() {
+    let p = CONFIG.player;
+    this.posX = p.posX;
+    this.posY = p.posY;
+    this.velX = p.velX;
+    this.velY = p.velY;
+    this.isFlapping = false;
   }
   update(timeChange) {
     this.velY += this.gravity * timeChange;

@@ -6,17 +6,26 @@ class Model {
     this.app = app;
     this.player = undefined;
     this.obstacles = undefined;
+    this.runTime = 0;
+    this.highscore = document.getElementById("highScore");
+    this.score = document.getElementById("score");
+    this.scoreValue = 0;
+    this.highscoreValue = 0;
   }
   initialize() {
     console.log("initializing model");
+    Player.initialize();
     this.player = new Player(this.app);
-    this.obstacles = this.makeObstacles();
+    Obstacle.initialize();
+    this.makeObstacles();
+    this.highscore.innerHTML = "";
+    setInterval(() => {
+      this.scoreValue = Math.floor(this.runTime / 1000) * 10;
+      this.score.innerHTML = this.scoreValue;
+    }, 100);
   }
   makeObstacles() {
-    Obstacle.initialize();
-    return [
-      // where and how would I place a limit to prevent the obstacles from overlapping when they randomize?
-      //also how do I add obstacles at posX 0.1 that don't appear when you begin the game?
+    this.obstacles = [
       new Obstacle(this.app, 0.1, 0.95, 0.3, 0.1, false),
       new Obstacle(this.app, 0.2, 0.975, 0.3, 0.05, false),
       new Obstacle(this.app, 0.4, 0.9, 0.1, 0.2, false),
@@ -40,45 +49,52 @@ class Model {
       new Obstacle(this.app, 1.2, 0.175, 0.3, 0.35, true),
     ];
   }
-  // performCollision() {
-  //   for (let i = 0; i < this.obstacles.length; i++) {
-  //     let obstacle = this.obstacles[i];
-  //     if (
-  //       CONFIG.player.posX + CONFIG.player.dimX * 0.5 >
-  //         obstacle.posX - obstacle.dimX * 0.5 &&
-  //       CONFIG.player.posX - CONFIG.player.dimX * 0.5 <
-  //         obstacle.posX + obstacle.dimX * 0.5 &&
-  //       CONFIG.player.posY - CONFIG.player.dimY * 0.5 <
-  //         obstacle.posY + obstacle.dimY * 0.5 &&
-  //       CONFIG.player.posY + CONFIG.player.dimY * 0.5 >
-  //         obstacle.posY - obstacle.dimY * 0.5 &&
-  //       CONFIG.player.posY + CONFIG.player.dimY * 0.5 >
-  //         obstacle.posY - obstacle.dimY * 0.5 &&
-  //       CONFIG.player.posY - CONFIG.player.dimY * 0.5 <
-  //         obstacle.posY + obstacle.dimY * 0.5
-  //     ) {
-  //       this.app.isRunning = false;
-  //       this.bonk.play();
-  //     }
-  //   }
-  // }
+  performCollision(obstacle) {
+    if (
+      obstacle.isBonkable &&
+      this.player.posX + this.player.dimX * 0.5 >
+        obstacle.posX - obstacle.collisionX &&
+      this.player.posX - this.player.dimX * 0.5 <
+        obstacle.posX + obstacle.collisionX &&
+      this.player.posY + this.player.dimY * 0.5 >
+        obstacle.posY - obstacle.collisionY &&
+      this.player.posY - this.player.dimY * 0.5 <
+        obstacle.posY + obstacle.collisionY
+    ) {
+      console.log("collision");
+      obstacle.collide();
+      this.app.quit();
+    }
+  }
   resize() {
     console.log("resizing model");
     //nothing to do because of the coordinate system we've chosen
   }
+  restart() {
+    this.scoreValue = 0;
+    this.player.restart();
+    this.makeObstacles();
+  }
   run(timeChange) {
     // console.log("running model");
+    this.runTime += timeChange;
     this.player.update(timeChange);
     for (let i = 0; i < this.obstacles.length; i++) {
       let obstacle = this.obstacles[i];
       obstacle.update(obstacle.posX - this.player.posX + this.player.fixedPosX);
     }
-    // for (let i = 0; i < this.obstacles.length; i++) {
-    //   let obstacle = this.obstacles[i];
-    //   this.performCollision(
-    //     obstacle.posX - this.player.posX + this.player.fixedPosX
-    //   );
-    // }
-    // detect collision here - right edge of one has to be past left edge of another, and top of one has to be past another
+    for (let i = 0; i < this.obstacles.length; i++) {
+      let obstacle = this.obstacles[i];
+      this.performCollision(
+        obstacle
+      );
+    }
+  }
+  setHighScore() {
+    if (this.scoreValue > this.highscoreValue) {
+      this.highscoreValue = this.scoreValue;
+      this.highscore.innerHTML = "highscore: " + this.scoreValue;
+      // how do I get it to say "highscore: " and then the number?
+    }
   }
 }
